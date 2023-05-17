@@ -18,6 +18,15 @@
 	}
 	// 요청값 변수에 저장
 	int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+	
+	int commentNo = 0;
+	if(request.getParameter("commentNo") != null) {
+		commentNo = Integer.parseInt(request.getParameter("commentNo"));
+	}
+	boolean updateComment = false;
+	if(request.getParameter("updateComment") != null) {
+		updateComment = Boolean.valueOf(request.getParameter("updateComment"));
+	}
 	// 요청값 디버깅
 	System.out.println(boardNo + " <-- boardOne prameter boardNo");
 	int currentPage = 1;
@@ -169,95 +178,106 @@
 		<%
 			if(one.getMemberId().equals(loginMemberId)) {
 		%>
-					<button type="submit">수정</button>
-					<button type="submit" formaction="<%=request.getContextPath()%>/board/deleteBoardAction.jsp">삭제</button>	
+			<button type="submit" class="btn btn-dark">수정</button>
+			<button type="submit" class="btn btn-dark" formaction="<%=request.getContextPath()%>/board/deleteBoardAction.jsp">삭제</button>	
 		<%	
 			}
 		%>
 		</form>
-		<%
-			if(session.getAttribute("loginMemberId") != null) {
-		%>
-				<form action="<%=request.getContextPath()%>/board/insertCommentAction.jsp">
-					<div class="row">
-						<div class="col-sm-10">
-							<input type="hidden" name="boardNo" value="<%=one.getBoardNo() %>">
-							<table class="table table-bordered">
-								<tr>
-									<th class="table-dark">commentContent</th>
-									<td>
-										<textarea class="form-control" cols="70" name="commentContent"></textarea>
-									</td>
-								</tr>
-							</table>
-						</div>	
-						<div class="col-sm-2">
-							<br>
-							<button type="submit">댓글입력</button>
-						</div>
-					</div>
-				</form>
-		<%	
-			}
-		%>
-		<form>
+		<br>
+		<form action="<%=request.getContextPath()%>/board/updateCommentAction.jsp">
 			<table class="table table-bordered">
 				<tr>
 					<th class="table-dark" col="3">댓글</th>
-					<th class="table-dark">수정</th>
-					<th class="table-dark">삭제</th>
 				</tr>
 				<%
 					for(Comment c : commentList){
 				%>
 						<tr>
 							<td col="3">
-								<div class="row">
-									<div class="col-sm-1">
-										<img src="<%=request.getContextPath()%>/img/profile.png" style="width:40px;">
+							<%
+								if(c.getMemberId().equals(loginMemberId) && updateComment == true) {
+							%>
+									<input type="hidden" name="boardNo" value="<%=c.getBoardNo() %>">
+									<input type="hidden" name="commentNo" value="<%=c.getCommentNo() %>">
+									<h5><%=session.getAttribute("loginMemberId") %></h5>
+									<div class="row">
+										<div class="col-sm">
+										<textarea class="form-control" cols="100" name="commentContent"></textarea>
+										</div>
+										<div class="col-sm-2">
+										<button type="submit" class="btn btn-dark">댓글수정</button>
+										</div>
+									</div>	
+							<%		
+								} else {
+							%>
+									<div class="row">
+										<div class="col-sm-1">
+											<img src="<%=request.getContextPath()%>/img/profile.png" style="width:40px;">
+										</div>
+										<div class="col-sm">
+											<h5><%=c.getMemberId() %></h5>
+											<p><%=c.getCommentContent() %></p>
+											<p class="text-muted"><small><%=c.getUpdatedate().substring(0, 10) %></small></p>
+										</div>
+										<div class="dropdown dropdown-menu-end col-sm-1">
+											 <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
+											 </button>
+									 	<%
+											if(c.getMemberId().equals(loginMemberId)) {	
+										%>
+											 <ul class="dropdown-menu">
+											   <li><a class="dropdown-item" href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=c.getBoardNo()%>&commentNo=<%=c.getCommentNo()%>&updateComment=true">수정</a></li>
+											   <li><a class="dropdown-item" href="<%=request.getContextPath()%>/board/deleteCommentAction.jsp?boardNo=<%=c.getBoardNo()%>&commentNo=<%=c.getCommentNo()%>">삭제</a></li>
+											 </ul>
+										<%			
+												}
+										%>
+										</div>
 									</div>
-									<div class="col-sm">
-										<h5><%=c.getMemberId() %></h5>
-										<p><%=c.getCommentContent() %></p>
-										<p class="text-muted"><small><%=c.getUpdatedate().substring(0, 10) %></small></p>
-									</div>
-									<div class="dropdown dropdown-menu-end col-sm-1">
-										 <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown">
-										 </button>
-										 <ul class="dropdown-menu">
-										   <li><a class="dropdown-item" href="#">수정</a></li>
-										   <li><a class="dropdown-item" href="#">삭제</a></li>
-										 </ul>
-									</div>
-								</div>
+							<%		
+								}
+							%>
 							</td>
-				<%
-						if(c.getMemberId().equals(loginMemberId)) {	
-				%>
-							<td><a href="<%=request.getContextPath()%>/board/updateCommentForm.jsp"><img src="<%=request.getContextPath()%>/img/edit.png"></a></td>
-							<td><img src="<%=request.getContextPath()%>/img/delete.png"></td>
-				<%			
-						} else {
-				%>
-							<td></td>
-							<td></td>
-				<%	
-						}
-				%>
 						</tr>
 				<%	
 					}
 				%>
 			</table>
-			<div>
-				<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()%>&currentPage=<%=currentPage-1%>">이전</a>
-				<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()%>&currentPage=<%=currentPage+1%>">다음</a>
-			</div>
 		</form>
-		<div class="container">
+		<%
+			if(session.getAttribute("loginMemberId") != null) {
+		%>
+				<form action="<%=request.getContextPath()%>/board/insertCommentAction.jsp">
+					<input type="hidden" name="boardNo" value="<%=one.getBoardNo() %>">
+					<table class="table table-bordered">
+						<tr>
+							<td>
+								<h5><%=session.getAttribute("loginMemberId") %></h5>
+								<div class="row">
+									<div class="col-sm">
+									<textarea class="form-control" cols="100" name="commentContent"></textarea>
+									</div>
+									<div class="col-sm-2">
+									<button type="submit" class="btn btn-dark">댓글입력</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
+		<%	
+			}
+		%>
+		<div>
+			<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()%>&currentPage=<%=currentPage-1%>">이전</a>
+			<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()%>&currentPage=<%=currentPage+1%>">다음</a>
+		</div>
+	</div>
+	<div class="mt-5 p-4 bg-dark text-white text-center">
 			<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
 			<jsp:include page="/inc/copyright.jsp"></jsp:include>
-		</div>
 	</div>
 </body>
 </html>
