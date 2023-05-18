@@ -103,7 +103,7 @@
 <body>
 	<div class="p-4 bg-dark text-white text-center">
 	  <h1>유저 게시판</h1>
-	  <p>상세 페이지</p> 
+	  <p>BoardOne</p> 
 	</div>
 	<div>
 		<!-- 메인메뉴 -->
@@ -196,14 +196,14 @@
 						<tr>
 							<td col="3">
 							<%
-								if(c.getMemberId().equals(loginMemberId) && updateComment == true) {
+								if(c.getMemberId().equals(loginMemberId) && updateComment == true && c.getCommentNo() == commentNo) {
 							%>
 									<input type="hidden" name="boardNo" value="<%=c.getBoardNo() %>">
 									<input type="hidden" name="commentNo" value="<%=c.getCommentNo() %>">
 									<h5><%=session.getAttribute("loginMemberId") %></h5>
 									<div class="row">
 										<div class="col-sm">
-										<textarea class="form-control" cols="100" name="commentContent"></textarea>
+										<textarea class="form-control" cols="100" name="commentContent"><%=c.getCommentContent()%></textarea>
 										</div>
 										<div class="col-sm-2">
 										<button type="submit" class="btn btn-dark">댓글수정</button>
