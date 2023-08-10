@@ -76,8 +76,8 @@
 					<td><%=profile.getCreatedate().substring(0, 10)%></td>
 				</tr>
 			</table>
-			<button type="submit">비밀번호 수정</button>
-			<button type="submit" formaction="<%=request.getContextPath() %>/member/deleteMemberAction.jsp">회원 탈퇴</button>
+			<button class="btn btn-dark" type="submit">비밀번호 수정</button>
+			<button class="btn btn-dark" type="submit" formaction="<%=request.getContextPath() %>/member/deleteMemberAction.jsp">회원 탈퇴</button>
 		</form>
 	</div>
 </body>

@@ -130,7 +130,11 @@
 	<div>
 		<!-- 페이지 -->
 		<div class="p-4 bg-dark text-white text-center">
-		  <h1>유저 게시판</h1>
+		  <h1>
+		   <img src="<%=request.getContextPath()%>/img/icon3.png" style="width:30px;">
+		   유저 게시판
+		   <img src="<%=request.getContextPath()%>/img/icon4.png" style="width:30px;">
+		  </h1>
 		  <p>Home</p> 
 		</div>
 		<%
@@ -170,7 +174,7 @@
 				</div>
 				<div class="col-sm-3">
 					<button class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#local">
-					  <img src="<%=request.getContextPath()%>/img/local.png" style="width:30px;">
+					  <img src="<%=request.getContextPath()%>/img/icon2.png" style="width:30px;">
 					</button>
 				</div>
 				<div class="col-sm-6"></div>
@@ -183,11 +187,11 @@
 						<form action="<%=request.getContextPath() %>/member/loginAction.jsp" method="post">
 							<div class="input-group col-sm-2">
 							    <span class="input-group-text bg-light"><img src="<%=request.getContextPath()%>/img/id.png" style="width:30px;"></span>
-							    <input type="text" class="form-control" placeholder="아이디" name="memberId">
+							    <input type="text" class="form-control" placeholder="아이디" name="memberId" value="user1">
 						  	</div>
 						  	<div class="input-group col-sm-2">
 							    <span class="input-group-text bg-light"><img src="<%=request.getContextPath()%>/img/password.png" style="width:30px;"></span>
-							    <input type="password" class="form-control" placeholder="비밀번호" name="memberPw">
+							    <input type="password" class="form-control" placeholder="비밀번호" name="memberPw" value="1234">
 						  	</div>
 						  	<br>
 						  	<div class="d-grid">

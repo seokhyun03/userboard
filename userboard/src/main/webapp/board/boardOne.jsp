@@ -63,6 +63,16 @@
 		one.setUpdatedate(oneRs.getString("updatedate"));
 	}
 	
+	// 게시물 최대 번호 
+	String maxSql = "SELECT MAX(board_no) maxNo FROM board";
+	PreparedStatement maxStmt = conn.prepareStatement(maxSql);
+	ResultSet maxRs = maxStmt.executeQuery();
+	
+	int maxNo = 0;
+	if(maxRs.next()){
+		maxNo = maxRs.getInt(1);
+	}
+	
 	// 댓글 결과셋
 	PreparedStatement commentStmt = null;
 	ResultSet commentRs = null;
@@ -102,7 +112,11 @@
 </head>
 <body>
 	<div class="p-4 bg-dark text-white text-center">
-	  <h1>유저 게시판</h1>
+	  <h1>
+	   <img src="<%=request.getContextPath()%>/img/icon3.png" style="width:30px;">
+	   유저 게시판
+	   <img src="<%=request.getContextPath()%>/img/icon4.png" style="width:30px;">
+	  </h1>
 	  <p>BoardOne</p> 
 	</div>
 	<div>
@@ -141,37 +155,54 @@
 	</div>
 	<br>
 	<div class="container">
+		<div>
+		<%
+			if(one.getBoardNo()>1){
+		%>
+				<a class="btn btn-dark" href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()-1%>">이전</a>
+		<%		
+			}
+			if(one.getBoardNo()<maxNo){
+		%>
+				<a class="btn btn-dark" href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()+1%>">다음</a>
+		<%		
+			}
+		%>
+			
+			
+		</div>
+		<br>
 		<form action="<%=request.getContextPath()%>/board/updateBoardForm.jsp" method="post">
 			<table class="table table-bordered">
 				<tr>
-					<th class="table-dark">boardNo</th>
+					<th class="table-dark" width="20%">boardNo</th>
 					<td>
 						<input type="hidden" name="boardNo" value="<%=one.getBoardNo() %>">
 						<%=one.getBoardNo() %>
 					</td>
 				</tr>
 				<tr>
-					<th class="table-dark">localName</th>
+					<th class="table-dark"  width="20%">localName</th>
 					<td><%=one.getLocalName() %></td>
 				</tr>
 				<tr>
-					<th class="table-dark">boardTitle</th>
+					<th class="table-dark"  width="20%">boardTitle</th>
 					<td><%=one.getBoardTitle() %></td>
 				</tr>
 				<tr>
-					<th class="table-dark">boardContent</th>
+					<th class="table-dark"  width="20%">boardContent</th>
 					<td><%=one.getBoardContent() %></td>
 				</tr>
 				<tr>
-					<th class="table-dark">memberId</th>
+					<th class="table-dark"  width="20%">memberId</th>
 					<td><%=one.getMemberId() %></td>
 				</tr>
 				<tr>
-					<th class="table-dark">createdate</th>
+					<th class="table-dark"  width="20%">createdate</th>
 					<td><%=one.getCreatedate() %></td>
 				</tr>
 				<tr>
-					<th class="table-dark">updatedate</th>
+					<th class="table-dark"  width="20%">updatedate</th>
 					<td><%=one.getUpdatedate().substring(0, 10) %></td>
 				</tr>
 			</table>
@@ -270,10 +301,6 @@
 		<%	
 			}
 		%>
-		<div>
-			<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()%>&currentPage=<%=currentPage-1%>">이전</a>
-			<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=one.getBoardNo()%>&currentPage=<%=currentPage+1%>">다음</a>
-		</div>
 	</div>
 	<div class="mt-5 p-4 bg-dark text-white text-center">
 			<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
